@@ -1,0 +1,497 @@
+[gd_scene load_steps=33 format=3 uid="uid://cltf15ie52bc0"]
+
+[ext_resource type="Script" path="res://Entities/Parasite/parasite.gd" id="1_5abxp"]
+[ext_resource type="Texture2D" uid="uid://b5hf7xu1ctyew" path="res://Assets/64x64Parasite-Sheet.png" id="2_sybii"]
+[ext_resource type="Script" path="res://Entities/Parasite/PossessManager.gd" id="3_8nyaw"]
+[ext_resource type="PackedScene" uid="uid://b8utpayc0tujr" path="res://Views/PowerupView/PowerupView.tscn" id="4_f74go"]
+[ext_resource type="Texture2D" uid="uid://cc2pevsm75t7j" path="res://Assets/64x64ParasiteAttack1-Sheet.png" id="5_0pblx"]
+[ext_resource type="PackedScene" uid="uid://cd605lyxxwdng" path="res://Views/GameOverView/game_over_view.tscn" id="6_mefio"]
+[ext_resource type="Texture2D" uid="uid://dh36x7omyorjx" path="res://Assets/64x64ParasiteAttack2-Sheet.png" id="6_mug52"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="7_twipk"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="8_jx5ts"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="9_gyp8i"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="10_i1e7h"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="11_ghsv0"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/animation_player_state.gd" id="12_no74h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j6jcx"]
+radius = 45.0111
+
+[sub_resource type="Animation" id="Animation_ebr4i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MiddleAttack:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.001),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftAttack:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RightAttack:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_kv86y"]
+resource_name = "attack"
+length = 1.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MiddleAttack:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.55),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_attack1_calculate_damage"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../StateChart")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"anim_end"],
+"method": &"send_event"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xiu6e"]
+resource_name = "attack2"
+length = 1.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftAttack:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightAttack:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.85),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_attack2_calculate_damage"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../StateChart")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"anim_end"],
+"method": &"send_event"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o1pr1"]
+_data = {
+"RESET": SubResource("Animation_ebr4i"),
+"attack": SubResource("Animation_kv86y"),
+"attack-wide": SubResource("Animation_xiu6e")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3tfy3"]
+size = Vector2(98, 148)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g837l"]
+size = Vector2(109, 57.5)
+
+[sub_resource type="Gradient" id="Gradient_mf4pu"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1vl3"]
+gradient = SubResource("Gradient_mf4pu")
+width = 128
+height = 128
+
+[sub_resource type="Gradient" id="Gradient_afi72"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.407843, 0.101961, 0.592157, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_71aw6"]
+gradient = SubResource("Gradient_afi72")
+width = 128
+height = 128
+fill = 2
+fill_to = Vector2(1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_t6qeu"]
+gradient = SubResource("Gradient_mf4pu")
+width = 256
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_3q0bk"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.788235, 0.00784314, 0.235294, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8xgyj"]
+gradient = SubResource("Gradient_3q0bk")
+width = 256
+height = 32
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ijf44"]
+radius = 40.025
+
+[sub_resource type="Animation" id="Animation_0oc0v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_fcyrb"]
+resource_name = "idle"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4ps34"]
+_data = {
+"RESET": SubResource("Animation_0oc0v"),
+"idle": SubResource("Animation_fcyrb")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7psni"]
+radius = 400.0
+
+[node name="Parasite" type="CharacterBody2D" node_paths=PackedStringArray("powerup_view", "gameover_view", "healthbar", "xpbar")]
+collision_layer = 3
+collision_mask = 3
+motion_mode = 1
+script = ExtResource("1_5abxp")
+powerup_view = NodePath("CanvasLayer/PowerupView")
+gameover_view = NodePath("CanvasLayer/GameOverView")
+healthbar = NodePath("CanvasLayer/Healthbar")
+xpbar = NodePath("CanvasLayer/XpBar")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_j6jcx")
+
+[node name="Attacks" type="Node2D" parent="."]
+
+[node name="MiddleAttack" type="Sprite2D" parent="Attacks"]
+position = Vector2(14, -72)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_0pblx")
+centered = false
+hframes = 3
+vframes = 3
+
+[node name="LeftAttack" type="Sprite2D" parent="Attacks"]
+position = Vector2(14, -70)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_mug52")
+centered = false
+hframes = 4
+vframes = 3
+
+[node name="RightAttack" type="Sprite2D" parent="Attacks"]
+position = Vector2(14, -21)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_mug52")
+centered = false
+flip_v = true
+hframes = 4
+vframes = 3
+
+[node name="AttackAnimationPlayer" type="AnimationPlayer" parent="Attacks"]
+libraries = {
+"": SubResource("AnimationLibrary_o1pr1")
+}
+speed_scale = 2.0
+
+[node name="WideAttackHitbox" type="Area2D" parent="Attacks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attacks/WideAttackHitbox"]
+position = Vector2(49, -3.55402e-05)
+shape = SubResource("RectangleShape2D_3tfy3")
+
+[node name="MiddleAtttackHitbox" type="Area2D" parent="Attacks"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attacks/MiddleAtttackHitbox"]
+position = Vector2(54.5, -0.749987)
+shape = SubResource("RectangleShape2D_g837l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -18)
+scale = Vector2(2, 2)
+texture = ExtResource("2_sybii")
+hframes = 4
+vframes = 4
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="PossessManager" type="Node2D" parent="."]
+script = ExtResource("3_8nyaw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GameOverView" parent="CanvasLayer" instance=ExtResource("6_mefio")]
+visible = false
+
+[node name="PowerupView" parent="CanvasLayer" instance=ExtResource("4_f74go")]
+
+[node name="XpBar" type="TextureProgressBar" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -29.0
+offset_right = 142.0
+offset_bottom = -13.0
+grow_vertical = 0
+value = 30.0
+fill_mode = 4
+texture_under = SubResource("GradientTexture2D_a1vl3")
+texture_progress = SubResource("GradientTexture2D_71aw6")
+
+[node name="XpBarLabel" type="Label" parent="CanvasLayer/XpBar"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = -26.0
+offset_right = 95.0
+offset_bottom = -3.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Biomass"
+horizontal_alignment = 1
+
+[node name="Healthbar" type="TextureProgressBar" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 151.0
+offset_top = -46.0
+offset_right = 407.0
+offset_bottom = -14.0
+grow_vertical = 0
+value = 44.0
+texture_under = SubResource("GradientTexture2D_t6qeu")
+texture_progress = SubResource("GradientTexture2D_8xgyj")
+
+[node name="HealthBarLabel" type="Label" parent="CanvasLayer/Healthbar"]
+layout_mode = 0
+offset_left = 97.0
+offset_top = -24.0
+offset_right = 162.0
+offset_bottom = -1.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Health"
+horizontal_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ijf44")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4ps34")
+}
+autoplay = "idle"
+speed_scale = 0.8
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("7_twipk")
+
+[node name="ParallelState" type="Node" parent="StateChart"]
+script = ExtResource("8_jx5ts")
+
+[node name="AttackState" type="Node" parent="StateChart/ParallelState"]
+script = ExtResource("9_gyp8i")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/ParallelState/AttackState"]
+script = ExtResource("10_i1e7h")
+
+[node name="To Attack" type="Node" parent="StateChart/ParallelState/AttackState/Idle"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../Attack1")
+event = &"attack"
+
+[node name="Attack1" type="Node" parent="StateChart/ParallelState/AttackState"]
+script = ExtResource("10_i1e7h")
+
+[node name="To WaitAttack2" type="Node" parent="StateChart/ParallelState/AttackState/Attack1"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../WaitForAttack2")
+event = &"anim_end"
+
+[node name="WaitForAttack2" type="Node" parent="StateChart/ParallelState/AttackState"]
+script = ExtResource("10_i1e7h")
+
+[node name="To Attack2" type="Node" parent="StateChart/ParallelState/AttackState/WaitForAttack2"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../Attack2")
+event = &"attack2"
+
+[node name="To Idle" type="Node" parent="StateChart/ParallelState/AttackState/WaitForAttack2"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../Idle")
+delay_seconds = 0.5
+
+[node name="Attack2" type="Node" parent="StateChart/ParallelState/AttackState"]
+script = ExtResource("10_i1e7h")
+
+[node name="To WaitAttack1" type="Node" parent="StateChart/ParallelState/AttackState/Attack2"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../WaitForAttack1")
+event = &"anim_end"
+
+[node name="WaitForAttack1" type="Node" parent="StateChart/ParallelState/AttackState"]
+script = ExtResource("10_i1e7h")
+
+[node name="To Idle" type="Node" parent="StateChart/ParallelState/AttackState/WaitForAttack1"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../Idle")
+delay_seconds = 0.5
+
+[node name="To Attack1" type="Node" parent="StateChart/ParallelState/AttackState/WaitForAttack1"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../../Attack1")
+event = &"attack"
+
+[node name="TentacleAnimation" type="Node" parent="StateChart/ParallelState"]
+script = ExtResource("9_gyp8i")
+initial_state = NodePath("RESET")
+
+[node name="attack" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("12_no74h")
+animation_player = NodePath("../../../../Attacks/AttackAnimationPlayer")
+
+[node name="RESET" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("12_no74h")
+animation_player = NodePath("../../../../Attacks/AttackAnimationPlayer")
+
+[node name="attack-wide" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("12_no74h")
+animation_player = NodePath("../../../../Attacks/AttackAnimationPlayer")
+
+[node name="To Attack" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../attack")
+event = &"attack_anim"
+
+[node name="To Attack2" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../attack-wide")
+event = &"attack2_anim"
+
+[node name="To Reset" type="Node" parent="StateChart/ParallelState/TentacleAnimation"]
+script = ExtResource("11_ghsv0")
+to = NodePath("../RESET")
+event = &"reset_anim"
+
+[node name="ThreatRange" type="Area2D" parent="."]
+process_mode = 3
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ThreatRange"]
+shape = SubResource("CircleShape2D_7psni")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="state_entered" from="StateChart/ParallelState/AttackState/Idle" to="StateChart" method="send_event" binds= [&"reset_anim"]]
+[connection signal="state_physics_processing" from="StateChart/ParallelState/AttackState/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/ParallelState/AttackState/Attack1" to="StateChart" method="send_event" binds= [&"attack_anim"]]
+[connection signal="state_physics_processing" from="StateChart/ParallelState/AttackState/WaitForAttack2" to="." method="_on_wait_for_attack_2_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/ParallelState/AttackState/Attack2" to="StateChart" method="send_event" binds= [&"attack2_anim"]]
+[connection signal="state_physics_processing" from="StateChart/ParallelState/AttackState/WaitForAttack1" to="." method="_on_wait_for_attack_1_state_physics_processing"]
+[connection signal="body_entered" from="ThreatRange" to="." method="_on_threat_range_body_entered"]
+[connection signal="body_exited" from="ThreatRange" to="." method="_on_threat_range_body_exited"]

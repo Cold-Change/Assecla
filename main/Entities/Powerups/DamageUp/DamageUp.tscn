@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjh6utvel5twv"]
+
+[ext_resource type="PackedScene" uid="uid://dmdruxagdkl4g" path="res://Entities/Powerups/Powerup.tscn" id="1_i1ehm"]
+[ext_resource type="Script" path="res://Entities/Powerups/DamageUp/damage_up.gd" id="2_a8rwf"]
+[ext_resource type="Texture2D" uid="uid://c180sdffixp4s" path="res://Assets/ChemicalFlask1.png" id="2_onju5"]
+
+[node name="Powerup" instance=ExtResource("1_i1ehm")]
+script = ExtResource("2_a8rwf")
+powerup_name = "Damage Up"
+description = "Increases base damage of your attacks by 1"
+icon = ExtResource("2_onju5")

@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3 uid="uid://bcab3f21j0b70"]
+
+[ext_resource type="Script" path="res://Entities/Parasite/tentacle.gd" id="1_0l3s4"]
+[ext_resource type="Texture2D" uid="uid://bh3nfrtteo6kj" path="res://Assets/Parasite Tentacle-3.png" id="1_rh7j0"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_xwue2"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_g357p"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fsqtc"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_w2n33"]
+
+[sub_resource type="Curve" id="Curve_kd5px"]
+_data = [Vector2(0, 0.319472), 0.0, 1.11536, 0, 0, Vector2(1, 1), 0.153424, 0.0, 0, 0]
+point_count = 2
+
+[node name="Tentacle" type="Line2D"]
+texture_repeat = 2
+points = PackedVector2Array(0, 0, 0, 0)
+width = 20.0
+width_curve = SubResource("Curve_kd5px")
+texture = ExtResource("1_rh7j0")
+texture_mode = 1
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 1
+script = ExtResource("1_0l3s4")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_xwue2")
+
+[node name="CompoundState" type="Node" parent="StateChart"]
+script = ExtResource("3_g357p")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_fsqtc")
+
+[node name="To Reaching" type="Node" parent="StateChart/CompoundState/Idle"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Reaching")
+event = &"reach"
+
+[node name="Reaching" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_fsqtc")
+
+[node name="To Hurt" type="Node" parent="StateChart/CompoundState/Reaching"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="To Return" type="Node" parent="StateChart/CompoundState/Reaching"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Return")
+event = &"return"
+
+[node name="To Holding Enemy" type="Node" parent="StateChart/CompoundState/Reaching"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Holding Enemy")
+event = &"hold_enemy"
+
+[node name="Hurt" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_fsqtc")
+
+[node name="To Return" type="Node" parent="StateChart/CompoundState/Hurt"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Return")
+delay_seconds = 0.2
+
+[node name="Return" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_fsqtc")
+
+[node name="To Idle" type="Node" parent="StateChart/CompoundState/Return"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Idle")
+event = &"idle"
+
+[node name="Holding Enemy" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_fsqtc")
+
+[node name="To Return" type="Node" parent="StateChart/CompoundState/Holding Enemy"]
+script = ExtResource("5_w2n33")
+to = NodePath("../../Return")
+event = &"return"
+
+[connection signal="state_entered" from="StateChart/CompoundState/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_exited" from="StateChart/CompoundState/Idle" to="." method="_on_idle_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/Reaching" to="." method="_on_reaching_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/CompoundState/Hurt" to="." method="_on_hurt_state_entered"]
+[connection signal="state_exited" from="StateChart/CompoundState/Hurt" to="." method="_on_hurt_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/Return" to="." method="_on_return_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/Holding Enemy" to="." method="_on_holding_enemy_state_physics_processing"]

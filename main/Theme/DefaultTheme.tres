@@ -1,0 +1,17 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://7twfchxrb8my"]
+
+[ext_resource type="StyleBox" uid="uid://bl208bmhgdoah" path="res://Theme/Dark9Slice.tres" id="1_nwr0n"]
+[ext_resource type="StyleBox" uid="uid://qmp2taqkovd8" path="res://Theme/Light9Slice.tres" id="2_k26ls"]
+
+[resource]
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/constants/h_separation = 32
+Button/font_sizes/font_size = 48
+Button/styles/disabled = ExtResource("2_k26ls")
+Button/styles/focus = ExtResource("1_nwr0n")
+Button/styles/hover = ExtResource("1_nwr0n")
+Button/styles/normal = ExtResource("2_k26ls")
+Button/styles/pressed = ExtResource("1_nwr0n")
+Panel/styles/panel = ExtResource("1_nwr0n")

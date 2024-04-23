@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://4lpuv3r0ktss"]
+
+[ext_resource type="PackedScene" uid="uid://bnc541dhmqq1n" path="res://World/Placeholder-tilemap.tscn" id="1_mxs2y"]
+[ext_resource type="PackedScene" uid="uid://cltf15ie52bc0" path="res://Entities/Parasite/parasite.tscn" id="2_jqetc"]
+[ext_resource type="PackedScene" uid="uid://cv5jgqhisdd0l" path="res://Entities/Enemy/enemy_rat.tscn" id="4_qx5kh"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="9_bjcr8"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_fti7o"]
+vertices = PackedVector2Array(830, 510, 1122, 642, -610, 642, 546, 510, 1122, -258, 830, 2, -610, -258, 546, 2)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 1, 0, 5), PackedInt32Array(6, 4, 5, 7), PackedInt32Array(2, 6, 7, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-663, -306, -659, 684, 1169, 689, 1171, -300)])
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation"
+agent_radius = 30.0
+
+[node name="EnemyAiTest" type="Node2D"]
+
+[node name="TileMap" parent="." groups=["navigation"] instance=ExtResource("1_mxs2y")]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
+navigation_polygon = SubResource("NavigationPolygon_fti7o")
+navigation_layers = 3
+
+[node name="Parasite" parent="." instance=ExtResource("2_jqetc")]
+position = Vector2(-401, -11)
+collision_layer = 3
+collision_mask = 3
+wall_min_slide_angle = 0.0
+
+[node name="StateChartDebugger" parent="Parasite" instance=ExtResource("9_bjcr8")]
+offset_left = -631.0
+offset_top = -354.0
+offset_right = -197.0
+offset_bottom = -76.0
+initial_node_to_watch = NodePath("../../EnemyRat/StateChart")
+
+[node name="EnemyRat" parent="." instance=ExtResource("4_qx5kh")]
+
+[node name="EnemyRat2" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(870, -148)
+
+[node name="EnemyRat3" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(588, -171)
+
+[node name="EnemyRat4" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(801, -53)
+
+[node name="EnemyRat5" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(278, -175)
+
+[node name="EnemyRat6" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(443, 80)
+
+[node name="EnemyRat7" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(870, -14)
+
+[node name="EnemyRat8" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(443, -208)
+
+[node name="EnemyRat9" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(801, -212)
+
+[node name="EnemyRat10" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(588, -68)
+
+[node name="EnemyRat11" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(740, -141)
+
+[node name="EnemyRat12" parent="." instance=ExtResource("4_qx5kh")]
+position = Vector2(882, -216)
+
+[editable path="EnemyRat"]

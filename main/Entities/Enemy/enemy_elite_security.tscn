@@ -1,0 +1,438 @@
+[gd_scene load_steps=30 format=3 uid="uid://6h7euc78qqi1"]
+
+[ext_resource type="Script" path="res://Entities/Enemy/Enemy.gd" id="1_qq2nw"]
+[ext_resource type="Texture2D" uid="uid://btf2cvf0bfskr" path="res://Assets/64x64EliteSecurityParasitized-Sheet.png" id="2_ohdjf"]
+[ext_resource type="Texture2D" uid="uid://bjur2wgixqyob" path="res://Assets/64x64EliteSecurity-Sheet.png" id="3_uxigj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_resjt"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_io2es"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_1cp8h"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_81od7"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_ao303"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="9_k46d6"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="10_efivk"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/history_state.gd" id="11_d7xef"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/animation_player_state.gd" id="12_cfxir"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2182o"]
+radius = 19.0
+height = 65.0
+
+[sub_resource type="Animation" id="Animation_57arv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_5whov"]
+resource_name = "attack"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 7, 8, 9, 10, 11, 12]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_attack_check_damage"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_np8hf"]
+resource_name = "death"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [9, 15]
+}
+
+[sub_resource type="Animation" id="Animation_jqmye"]
+resource_name = "hurt"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [9]
+}
+
+[sub_resource type="Animation" id="Animation_osj6p"]
+resource_name = "idle"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_cae00"]
+resource_name = "run"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sk5gn"]
+_data = {
+"RESET": SubResource("Animation_57arv"),
+"attack": SubResource("Animation_5whov"),
+"death": SubResource("Animation_np8hf"),
+"hurt": SubResource("Animation_jqmye"),
+"idle": SubResource("Animation_osj6p"),
+"run": SubResource("Animation_cae00")
+}
+
+[sub_resource type="Resource" id="Resource_y72hu"]
+script = ExtResource("9_k46d6")
+state = NodePath("../Death")
+
+[sub_resource type="Resource" id="Resource_gbx4r"]
+script = ExtResource("10_efivk")
+guard = SubResource("Resource_y72hu")
+
+[sub_resource type="Resource" id="Resource_sae53"]
+script = ExtResource("9_k46d6")
+state = NodePath("../Death")
+
+[sub_resource type="Resource" id="Resource_wv2rg"]
+script = ExtResource("10_efivk")
+guard = SubResource("Resource_sae53")
+
+[sub_resource type="Resource" id="Resource_0uvuy"]
+script = ExtResource("9_k46d6")
+state = NodePath("../death")
+
+[sub_resource type="Resource" id="Resource_donbl"]
+script = ExtResource("10_efivk")
+guard = SubResource("Resource_0uvuy")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_emlwu"]
+radius = 36.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4nm44"]
+radius = 350.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dap84"]
+radius = 53.0094
+
+[node name="EnemyEliteSecurity" type="CharacterBody2D"]
+scale = Vector2(2.5, 2.5)
+collision_mask = 3
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_qq2nw")
+min_xp = 2.0
+max_xp = 6.0
+possessed_sprite = ExtResource("2_ohdjf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_uxigj")
+hframes = 4
+vframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_2182o")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sk5gn")
+}
+autoplay = "idle"
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("4_resjt")
+track_in_editor = true
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("5_io2es")
+
+[node name="CompoundState" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_1cp8h")
+initial_state = NodePath("Normal State")
+
+[node name="Normal State" type="Node" parent="StateChart/Root/CompoundState"]
+script = ExtResource("6_1cp8h")
+initial_state = NodePath("Chase")
+
+[node name="Chase" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("7_81od7")
+
+[node name="To Attack" type="Node" parent="StateChart/Root/CompoundState/Normal State/Chase"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Attack")
+event = &"attack"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/CompoundState/Normal State/Chase"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="Attack" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("7_81od7")
+
+[node name="To Chase" type="Node" parent="StateChart/Root/CompoundState/Normal State/Attack"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Chase")
+event = &"attack_end"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/CompoundState/Normal State/Attack"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="Hurt" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("7_81od7")
+
+[node name="To Chase" type="Node" parent="StateChart/Root/CompoundState/Normal State/Hurt"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Chase")
+delay_seconds = 0.5
+
+[node name="To Controlled" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Controlled State/Go Home")
+event = &"controlled"
+
+[node name="To Death" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("8_ao303")
+to = NodePath("../Death")
+event = &"death"
+guard = SubResource("Resource_gbx4r")
+
+[node name="Death" type="Node" parent="StateChart/Root/CompoundState/Normal State"]
+script = ExtResource("7_81od7")
+
+[node name="To Cleanup" type="Node" parent="StateChart/Root/CompoundState/Normal State/Death"]
+script = ExtResource("8_ao303")
+to = NodePath("../../../Cleanup")
+delay_seconds = 0.5
+
+[node name="Controlled State" type="Node" parent="StateChart/Root/CompoundState"]
+script = ExtResource("6_1cp8h")
+initial_state = NodePath("Go Home")
+
+[node name="Go Home" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Seek" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Go Home"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Seek")
+event = &"seek"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Go Home"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="Seek" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Chase" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Seek"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Chase")
+event = &"chase"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Seek"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="Chase" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Attack" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Chase"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Attack")
+event = &"attack"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Chase"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Hurt")
+event = &"hurt"
+
+[node name="To Go Home" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Chase"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Go Home")
+event = &"go_home"
+
+[node name="Attack" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Go Home" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Attack"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Go Home")
+event = &"attack_end"
+
+[node name="Hurt" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Last" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Hurt"]
+script = ExtResource("8_ao303")
+to = NodePath("../../Last")
+delay_seconds = 0.2
+
+[node name="To Death" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("8_ao303")
+to = NodePath("../Death")
+event = &"death"
+guard = SubResource("Resource_wv2rg")
+
+[node name="Last" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("11_d7xef")
+default_state = NodePath("../Go Home")
+
+[node name="Death" type="Node" parent="StateChart/Root/CompoundState/Controlled State"]
+script = ExtResource("7_81od7")
+
+[node name="To Cleanup" type="Node" parent="StateChart/Root/CompoundState/Controlled State/Death"]
+script = ExtResource("8_ao303")
+to = NodePath("../../../Cleanup")
+delay_seconds = 0.5
+
+[node name="Cleanup" type="Node" parent="StateChart/Root/CompoundState"]
+script = ExtResource("7_81od7")
+
+[node name="AnimationState" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_1cp8h")
+initial_state = NodePath("run")
+
+[node name="run" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("12_cfxir")
+animation_player = NodePath("../../../../AnimationPlayer")
+
+[node name="attack" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("12_cfxir")
+animation_player = NodePath("../../../../AnimationPlayer")
+
+[node name="hurt" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("12_cfxir")
+animation_player = NodePath("../../../../AnimationPlayer")
+
+[node name="death" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("12_cfxir")
+animation_player = NodePath("../../../../AnimationPlayer")
+
+[node name="To Run" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("8_ao303")
+to = NodePath("../run")
+event = &"run_anim"
+
+[node name="To Death" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("8_ao303")
+to = NodePath("../death")
+event = &"death"
+guard = SubResource("Resource_donbl")
+
+[node name="To Attack" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("8_ao303")
+to = NodePath("../attack")
+event = &"attack_anim"
+
+[node name="To Hurt" type="Node" parent="StateChart/Root/AnimationState"]
+script = ExtResource("8_ao303")
+to = NodePath("../hurt")
+event = &"hurt_anim"
+
+[node name="AttackRange" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+shape = SubResource("CircleShape2D_emlwu")
+
+[node name="ControlledSeekRange" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ControlledSeekRange"]
+shape = SubResource("CircleShape2D_4nm44")
+
+[node name="DamageRange" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageRange"]
+shape = SubResource("CircleShape2D_dap84")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Normal State/Chase" to="StateChart" method="send_event" binds= [&"run_anim"]]
+[connection signal="state_physics_processing" from="StateChart/Root/CompoundState/Normal State/Chase" to="." method="_on_chase_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/CompoundState/Normal State/Chase" to="." method="_on_attack_check"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Normal State/Attack" to="StateChart" method="send_event" binds= [&"attack_anim"]]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Normal State/Hurt" to="StateChart" method="send_event" binds= [&"hurt_anim"]]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Normal State/Death" to="." method="_on_normal_death_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State" to="." method="_on_controlled_state_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Go Home" to="." method="_on_go_home_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Go Home" to="StateChart" method="send_event" binds= [&"run_anim"]]
+[connection signal="state_physics_processing" from="StateChart/Root/CompoundState/Controlled State/Go Home" to="." method="_on_go_home_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Seek" to="StateChart" method="send_event" binds= [&"run_anim"]]
+[connection signal="state_physics_processing" from="StateChart/Root/CompoundState/Controlled State/Seek" to="." method="_on_seek_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Chase" to="StateChart" method="send_event" binds= [&"run_anim"]]
+[connection signal="state_physics_processing" from="StateChart/Root/CompoundState/Controlled State/Chase" to="." method="_on_chase_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/CompoundState/Controlled State/Chase" to="." method="_on_controlled_attack_check"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Attack" to="StateChart" method="send_event" binds= [&"attack_anim"]]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Hurt" to="StateChart" method="send_event" binds= [&"hurt_anim"]]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Controlled State/Death" to="." method="_on_controlled_death_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/CompoundState/Cleanup" to="." method="_on_cleanup_state_entered"]

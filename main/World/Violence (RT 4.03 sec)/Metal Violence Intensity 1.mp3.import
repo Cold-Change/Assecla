@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bdl1clrklm0bc"
+path="res://.godot/imported/Metal Violence Intensity 1.mp3-43b632625f6401589dede7077f19a678.mp3str"
+
+[deps]
+
+source_file="res://World/Violence (RT 4.03 sec)/Metal Violence Intensity 1.mp3"
+dest_files=["res://.godot/imported/Metal Violence Intensity 1.mp3-43b632625f6401589dede7077f19a678.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

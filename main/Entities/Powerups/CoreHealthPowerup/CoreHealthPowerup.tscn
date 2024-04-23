@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhj5phj4j22h5"]
+
+[ext_resource type="PackedScene" uid="uid://dmdruxagdkl4g" path="res://Entities/Powerups/Powerup.tscn" id="1_db2xt"]
+[ext_resource type="Script" path="res://Entities/Powerups/CoreHealthPowerup/CoreHealthPowerup.gd" id="2_faerb"]
+[ext_resource type="Texture2D" uid="uid://bdfnjxit1kq3s" path="res://Assets/PowerUp_IncreaseMaxHealth.png" id="3_fmv8j"]
+
+[node name="Powerup" instance=ExtResource("1_db2xt")]
+script = ExtResource("2_faerb")
+powerup_name = "Potentia"
+description = "Increases max health by 2"
+rarity = 1
+icon = ExtResource("3_fmv8j")

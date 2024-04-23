@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://b3b63x70rj0x3"]
+
+[ext_resource type="PackedScene" uid="uid://bnc541dhmqq1n" path="res://World/Placeholder-tilemap.tscn" id="1_8ggep"]
+[ext_resource type="PackedScene" uid="uid://cltf15ie52bc0" path="res://Entities/Parasite/parasite.tscn" id="2_lactx"]
+[ext_resource type="PackedScene" uid="uid://w246oygu7m2m" path="res://Entities/Enemy/enemy-basicA.tscn" id="3_axub7"]
+[ext_resource type="PackedScene" uid="uid://c4hb5oq6btwf6" path="res://Entities/Enemy/enemy-basicB.tscn" id="4_001tc"]
+[ext_resource type="PackedScene" uid="uid://c5g2e5vi1iyls" path="res://Entities/Enemy/enemy-gunnerA.tscn" id="5_vhau6"]
+[ext_resource type="PackedScene" uid="uid://c7vgred4lb1uk" path="res://Entities/Enemy/enemy-shieldA.tscn" id="6_abmh4"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TileMap" parent="." instance=ExtResource("1_8ggep")]
+
+[node name="Parasite" parent="." instance=ExtResource("2_lactx")]
+position = Vector2(309, 248)
+
+[node name="Enemy" parent="." instance=ExtResource("3_axub7")]
+position = Vector2(523, -115)
+
+[node name="Enemy2" parent="." instance=ExtResource("4_001tc")]
+position = Vector2(847, 5)
+
+[node name="Enemy3" parent="." instance=ExtResource("5_vhau6")]
+position = Vector2(-61, 191)
+
+[node name="Enemy4" parent="." instance=ExtResource("6_abmh4")]
+position = Vector2(-157, 472)
+
+[node name="Enemy5" parent="." instance=ExtResource("3_axub7")]
+position = Vector2(195, -60)
+
+[node name="Enemy6" parent="." instance=ExtResource("4_001tc")]
+position = Vector2(519, 61)
+
+[node name="Enemy7" parent="." instance=ExtResource("5_vhau6")]
+position = Vector2(-389, 247)
+
+[node name="Enemy8" parent="." instance=ExtResource("6_abmh4")]
+position = Vector2(-485, 528)
+
+[node name="Enemy9" parent="." instance=ExtResource("3_axub7")]
+position = Vector2(741, -55)
+
+[node name="Enemy10" parent="." instance=ExtResource("4_001tc")]
+position = Vector2(1065, 66)
+
+[node name="Enemy11" parent="." instance=ExtResource("5_vhau6")]
+position = Vector2(157, 252)
+
+[node name="Enemy12" parent="." instance=ExtResource("6_abmh4")]
+position = Vector2(61, 532)
+
+[editable path="Parasite"]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=7 format=3 uid="uid://ua0muxhfn5ax"]
+
+[ext_resource type="Script" path="res://Entities/Biomass/Biomass.gd" id="1_m63il"]
+[ext_resource type="Texture2D" uid="uid://xx2gne4ahmn1" path="res://Assets/Biomass1.png" id="2_a8wdp"]
+[ext_resource type="Texture2D" uid="uid://0n502ybngxoc" path="res://Assets/Biomass2.png" id="3_riu11"]
+[ext_resource type="Texture2D" uid="uid://c3k1dfd8kd6fk" path="res://Assets/Biomass3.png" id="4_qapg1"]
+[ext_resource type="Texture2D" uid="uid://blg5bx0132eof" path="res://Assets/Biomass4.png" id="5_xgqdv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hakg0"]
+
+[node name="Biomass" type="Node2D"]
+script = ExtResource("1_m63il")
+textures = Array[Texture2D]([ExtResource("2_a8wdp"), ExtResource("3_riu11"), ExtResource("4_qapg1"), ExtResource("5_xgqdv")])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -7)
+texture = ExtResource("2_a8wdp")
+
+[node name="Area2D" type="Area2D" parent="."]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_hakg0")
